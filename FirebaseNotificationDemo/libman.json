@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "defaultProvider": "filesystem",
+  "libraries": [
+    {
+      "library": "https://github.com/firebase/quickstart-js/blob/7d514fb4700d3a1681c47bf3e0ff0fa3d7c91910/messaging/firebase-messaging-sw.js",
+      "destination": "wwwroot/"
+    }
+  ]
+}
