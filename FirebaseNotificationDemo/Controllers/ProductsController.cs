@@ -45,6 +45,14 @@ namespace FirebaseNotificationDemo.Controllers
             {
                 return NotFound();
             }
+            return View(product);
+        }
+
+        [HttpGet]
+        public async Task<string> Notify(int? id)
+        {
+            var product = await _context.Product
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             FirebaseNotification noti = new FirebaseNotification();
             DataMessage data = new DataMessage()
@@ -53,13 +61,13 @@ namespace FirebaseNotificationDemo.Controllers
                 RegistrationIds = new List<string>() { androidDeviceToken, webDeviceToken },
                 notification = new Notification()
                 {
-                    title = "Detail product" + product.Id,
-                    text = "This is the detail product for Id " + product.Id
+                    title = product.Name,
+                    text = "Name: " + product.Name + "\nPrice: " + product.Price + "\nStore: " + product.Store
                 }
             };
             string result = await noti.SendMessage(data);
 
-            return View(product);
+            return result;
         }
 
         public IActionResult Create()
@@ -81,7 +89,12 @@ namespace FirebaseNotificationDemo.Controllers
                 DataMessage data = new DataMessage()
                 {
                     Data = product,
-                    RegistrationIds = new List<string>() { androidDeviceToken, webDeviceToken }
+                    RegistrationIds = new List<string>() { androidDeviceToken, webDeviceToken },
+                    notification = new Notification()
+                    {
+                        title = product.Name,
+                        text = "Name: " + product.Name + "\nPrice: " + product.Price + "\nStore: " + product.Store
+                    }
                 };
                 await noti.SendMessage(data);
                 return RedirectToAction(nameof(Index));
